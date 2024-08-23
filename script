@@ -1,0 +1,30 @@
+//to use, copy all code below to google script and follow readme
+
+const ss = SpreadsheetApp.getActiveSpreadsheet();
+const sheet = ss.getSheetByName("sheet1");
+
+//get token from line notification
+let token = [replace with token]
+
+function setContent(content){
+  var opt = {
+    "Method": "POST",
+    "payload": {"message": content},
+    "headers": {"Authorization": "Bearer " + token}
+  }
+  UrlFetchApp.fetch("https://notify-api.line.me/api/notify" , opt)  
+}
+
+function MsgContent(){
+  var dateObj = new Date();
+  var day = dateObj.getDate();
+  var today = 0;
+  for (i = 2; i <30; i++){
+      let check = sheet.getRange(i , 1).getValue();
+      if (check == day) today = i;
+  }
+  parseInt(today)
+  if (today == 0) return;
+  let content = sheet.getRange(today , 2).getValue();
+  setContent(content);
+}
